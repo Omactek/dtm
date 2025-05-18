@@ -166,11 +166,13 @@ class Ui_MainForm(object):
         self.actionContour_lines.triggered.connect(self.contourLinesClick)
         self.actionParameters.triggered.connect(self.settingsClick)
         self.actionAnalyzeSlope.triggered.connect(self.analyzeSlopeClick)
+        self.actionAnalyzeAspect.triggered.connect(self.analyzeAspectClick)
         
         self.actionPoints.changed.connect(self.pointsChanged)
         self.actionDT.changed.connect(self.DTChanged)
         self.actionContourLines.changed.connect(self.contourLinesChanged)
         self.actionSlope.changed.connect(self.slopeChanged)
+        self.actionAspect.changed.connect(self.aspectChanged)
 
         self.actionClear_data.triggered.connect(self.clearData)
         self.actionClear_all.triggered.connect(self.clearAll)
@@ -181,7 +183,7 @@ class Ui_MainForm(object):
         
         
     def dtClick(self):
-        # Perform Delaunay Triangulation
+        #Perform Delaunay Triangulation and redraw
         points = ui.Canvas.points
 
         a = Algorithms()
@@ -191,7 +193,7 @@ class Ui_MainForm(object):
         ui.Canvas.repaint()
 
     def contourLinesClick(self):
-        # Compute contour lines
+        #Compute and draw contour lines
         dt = ui.Canvas.dt
 
         a = Algorithms()
@@ -201,20 +203,31 @@ class Ui_MainForm(object):
         ui.Canvas.repaint()
 
     def settingsClick(self):
-        # Show settings
         self.dialog.exec()
-
-        # Update parameters from the UI dialog
-        self.zmin = self.ui_dialog.getZmin()
-        self.zmax = self.ui_dialog.getZmax()
-        self.dz = self.ui_dialog.getdZ()
+        self.zmin = self.ui_dialog.spinBox.value()
+        self.zmax = self.ui_dialog.spinBox_2.value()
+        self.dz = self.ui_dialog.spinBox_3.value()
 
     def analyzeSlopeClick(self):
+        self.actionSlope.setChecked(True)
+        self.actionAspect.setChecked(False)
         dt = ui.Canvas.dt
         triangles = ui.Canvas.triangles
 
         a = Algorithms()
         triangles = a.analyzeDTMSlope(dt, triangles)
+
+        ui.Canvas.triangles = triangles
+        ui.Canvas.repaint()
+
+    def analyzeAspectClick(self):
+        self.actionSlope.setChecked(False)
+        self.actionAspect.setChecked(True)
+        dt = ui.Canvas.dt
+        triangles = ui.Canvas.triangles
+
+        a = Algorithms()
+        triangles = a.analyzeDTMAspect(dt, triangles)
 
         ui.Canvas.triangles = triangles
         ui.Canvas.repaint()
@@ -236,7 +249,7 @@ class Ui_MainForm(object):
         ui.Canvas.repaint()
 
     def aspectChanged(self):
-        ui.Canvas.view_aspect = self.actionSlope.isChecked()
+        ui.Canvas.view_aspect = self.actionAspect.isChecked()
         ui.Canvas.repaint()
 
     def clearData(self):

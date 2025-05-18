@@ -152,3 +152,24 @@ class Algorithms:
             p1, p2, p3 = t.p1, t.p2, t.p3
             t.slope = self.computeSlope(p1, p2, p3)
         return triangles
+
+    def computeAspect(self, p1, p2, p3):
+        ux, uy, uz = p3.x() - p2.x(), p3.y() - p2.y(), p3.z - p2.z
+        vx, vy, vz = p1.x() - p2.x(), p1.y() - p2.y(), p1.z - p2.z
+        nx = uy * vz - uz * vy
+        ny = -(ux * vz - uz * vx)
+        nz = ux * vy - uy * vx
+
+        aspect = atan2(ny, nx)
+        if aspect < 0:
+            aspect += 2 * pi
+
+        return aspect
+    
+    def analyzeDTMAspect(self, dt, triangles):
+        if not triangles:
+            triangles = self.convertDTToTriangles(dt, triangles)
+        for t in triangles:
+            p1, p2, p3 = t.p1, t.p2, t.p3
+            t.aspect = self.computeAspect(p1, p2, p3)
+        return triangles

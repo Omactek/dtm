@@ -15,7 +15,7 @@ class Ui_Settings(object):
         #Parameters of contour lines
         self.zmin = 150 
         self.zmax = 2000
-        self.dz = 10
+        self.dz = 25
     
     def setupUi(self, Settings):
         Settings.setObjectName("Settings")
@@ -91,18 +91,6 @@ class Ui_Settings(object):
         self.label_3.setText(_translate("Settings", "m"))
         self.label_6.setText(_translate("Settings", "Contour line height step"))
         self.label_5.setText(_translate("Settings", "m"))
-
-    def getZmin(self):
-        #Return min contour line value
-        return self.zmin
-
-    def getZmax(self):
-        #Return max contour line value
-        return self.zmax    
-
-    def getdZ(self):
-        #Return contour line interval value
-        return self.dz
     
 if __name__ == "__main__":
     import sys

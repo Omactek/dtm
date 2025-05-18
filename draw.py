@@ -13,7 +13,6 @@ class Draw(QWidget):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-
         self.view_points = True
         self.view_dt = True
         self.view_contour_lines = True
@@ -29,6 +28,18 @@ class Draw(QWidget):
         self.zmax = 1500
         self.dz = 50
 
+        self.aspect_colors = [
+            QColor("#fa0100"),  # Red
+            QColor("#ffa401"),  # Orange
+            QColor("#fdfe01"),  # Yellow
+            QColor("#00fe03"),  # Green
+            QColor("#00ffff"),  # Cyan
+            QColor("#00a5fe"),  # Light Blue
+            QColor("#0000fd"),  # Blue
+            QColor("#fc00f9"),  # Magenta
+            QColor("#fd0000")   # Red
+        ]
+
     def mousePressEvent(self, e: QMouseEvent):
         x = e.position().x()
         y = e.position().y()
@@ -40,13 +51,24 @@ class Draw(QWidget):
     def paintEvent(self, e: QPaintEvent):
         qp = QPainter(self)
 
-        if self.view_aspect:
+        if self.view_slope:
             qp.setPen(Qt.GlobalColor.black)
             for t in self.triangles:
                 p1, p2, p3 = t.p1, t.p2, t.p3
                 slope = t.slope
                 color = int(255 - ((255 / pi) * slope))
                 qp.setBrush(QColor(color, color, color))
+
+                poly = QPolygonF([p1, p2, p3])
+                qp.drawPolygon(poly)
+
+        if self.view_aspect:
+            qp.setPen(Qt.GlobalColor.black)
+            for t in self.triangles:
+                p1, p2, p3 = t.p1, t.p2, t.p3
+                aspect = t.aspect
+                color = self.getAspectColor(aspect)
+                qp.setBrush(color)
 
                 poly = QPolygonF([p1, p2, p3])
                 qp.drawPolygon(poly)
@@ -80,3 +102,8 @@ class Draw(QWidget):
         self.contour_lines.clear()
         self.triangles.clear()
         self.repaint()
+
+    def getAspectColor(self, aspect_radians):
+        index = int((aspect_radians / (2 * pi)) * len(self.aspect_colors))
+        index = min(index, len(self.aspect_colors) - 1)
+        return self.aspect_colors[index]
