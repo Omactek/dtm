@@ -99,5 +99,5 @@ class Draw(QWidget):
 
     def getAspectColor(self, aspect):
         aspect_deg = aspect * 180 / pi
-        index = int((aspect_deg + 22.5 )// 45) % 8 
+        index = int((aspect_deg + 22.5 )// 45) % 8 # +22.5 to properly center intervals
         return self.aspect_colors[index]

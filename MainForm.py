@@ -19,9 +19,7 @@ class Ui_MainForm(object):
         self.zmin = 150
         self.zmax = 1500
         self.dz = 50
-        self.dt_flag = False
-        self.data_flag = False
-        
+        self.dt_flag = False        
     
     def setupUi(self, MainForm):
         MainForm.setObjectName("MainForm")
