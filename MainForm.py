@@ -19,6 +19,7 @@ class Ui_MainForm(object):
         self.zmin = 150
         self.zmax = 1500
         self.dz = 50
+        self.dt_flag = False
         
     
     def setupUi(self, MainForm):
@@ -194,8 +195,11 @@ class Ui_MainForm(object):
 
         ui.Canvas.dt = dt
         ui.Canvas.repaint()
+        self.dt_flag = True
 
     def contourLinesClick(self):
+        if self.dt_flag == False:
+            self.dtClick()
         #Compute and draw contour lines
         dt = ui.Canvas.dt
 
@@ -212,6 +216,8 @@ class Ui_MainForm(object):
         self.dz = self.ui_dialog.spinBox_3.value()
 
     def analyzeSlopeClick(self):
+        if self.dt_flag == False:
+            self.dtClick()
         self.actionSlope.setChecked(True)
         self.actionAspect.setChecked(False)
         dt = ui.Canvas.dt
@@ -224,6 +230,8 @@ class Ui_MainForm(object):
         ui.Canvas.repaint()
 
     def analyzeAspectClick(self):
+        if self.dt_flag == False:
+            self.dtClick()
         self.actionSlope.setChecked(False)
         self.actionAspect.setChecked(True)
         dt = ui.Canvas.dt
