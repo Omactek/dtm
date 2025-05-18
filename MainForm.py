@@ -16,7 +16,7 @@ class Ui_MainForm(object):
         #Contour line parameters
         self.zmin = 150
         self.zmax = 1500
-        self.dz = 10
+        self.dz = 50
         
     
     def setupUi(self, MainForm):
@@ -172,120 +172,83 @@ class Ui_MainForm(object):
         self.actionContourLines.changed.connect(self.contourLinesChanged)
         self.actionSlope.changed.connect(self.slopeChanged)
 
+        self.actionClear_data.triggered.connect(self.clearData)
+        self.actionClear_all.triggered.connect(self.clearAll)
+        self.actionExit.triggered.connect(self.closeApp)
+
         self.retranslateUi(MainForm)
         QtCore.QMetaObject.connectSlotsByName(MainForm)
         
         
     def dtClick(self):
-        #Perform Delaunay Triangulation
-        
-        #Get input data (points)
-        points = ui.Canvas.getPoints()
-    
-        #Run DT
+        # Perform Delaunay Triangulation
+        points = ui.Canvas.points
+
         a = Algorithms()
-        dt= a.delaunayTriangulation(points) 
-        
-        #Set results (dt)
-        ui.Canvas.setDT(dt)
-        
-        #Repaint
-        self.Canvas.repaint()
-        
-        
+        dt = a.delaunayTriangulation(points)
+
+        ui.Canvas.dt = dt
+        ui.Canvas.repaint()
+
     def contourLinesClick(self):
-         #Compute contour lines
-         
-         #Get dt
-         dt = ui.Canvas.getDT()
-         
-         #Calculate contours
-         a = Algorithms()
-         contour_lines = a.createContourLines(dt, self.zmin, self.zmax, self.dz)
-         
-         #Set countours to Draw class
-         ui.Canvas.setContourLines(contour_lines)
-         
-         #Repaint canvas
-         self.Canvas.repaint()
-         
-    
+        # Compute contour lines
+        dt = ui.Canvas.dt
+
+        a = Algorithms()
+        contour_lines = a.createContourLines(dt, self.zmin, self.zmax, self.dz)
+
+        ui.Canvas.contour_lines = contour_lines
+        ui.Canvas.repaint()
+
     def settingsClick(self):
-        #Show settings
+        # Show settings
         self.dialog.exec()
-        
-        #Update parameters
+
+        # Update parameters from the UI dialog
         self.zmin = self.ui_dialog.getZmin()
         self.zmax = self.ui_dialog.getZmax()
         self.dz = self.ui_dialog.getdZ()
-        
-        print(self.zmin)
-        
-    
+
     def analyzeSlopeClick(self):
-        #Analyze slope
-        
-        #Get DT
-        dt = ui.Canvas.getDT()
-        
-        #Get triangles
-        triangles = ui.Canvas.getTriangles()
-        #Analyze slope
+        dt = ui.Canvas.dt
+        triangles = ui.Canvas.triangles
+
         a = Algorithms()
-        a.analyzeDTMSlope(dt, triangles)
-        
-        #Set results
-        ui.Canvas.setTriangles(triangles)
-        
-        #Repaint
-        self.Canvas.repaint()
-        
+        triangles = a.analyzeDTMSlope(dt, triangles)
+
+        ui.Canvas.triangles = triangles
+        ui.Canvas.repaint()
+
     def pointsChanged(self):
-        #View/Hide points
-        view_points = self.actionPoints.isChecked()
-        
-        #Set status
-        ui.Canvas.setViewPoints(view_points)
-        
-        #Repaint
-        self.Canvas.repaint()
-        
-        
+        ui.Canvas.view_points = self.actionPoints.isChecked()
+        ui.Canvas.repaint()
+
     def DTChanged(self):
-        #View/Hide DT
-        view_DT = self.actionDT.isChecked()
-        
-        #Set status
-        ui.Canvas.setViewDT(view_DT)
-        
-        #Repaint
-        self.Canvas.repaint()
-        
+        ui.Canvas.view_dt = self.actionDT.isChecked()
+        ui.Canvas.repaint()
+
     def contourLinesChanged(self):
-        #View/Hide Contour lines
-        view_contour_lines = self.actionContourLines.isChecked()
-        
-        #Set status
-        ui.Canvas.setViewContourLines(view_contour_lines)
-        
-        #Repaint
-        self.Canvas.repaint()
-        
-        
+        ui.Canvas.view_contour_lines = self.actionContourLines.isChecked()
+        ui.Canvas.repaint()
+
     def slopeChanged(self):
-        #View/Hide slope
-        view_slope = self.actionSlope.isChecked()
-        
-        #Set status
-        ui.Canvas.setViewDT(view_slope)
-        
-        #Repaint
-        self.Canvas.repaint()    
+        ui.Canvas.view_slope = self.actionSlope.isChecked()
+        ui.Canvas.repaint()
 
     def aspectChanged(self):
-        view_aspect = self.actionSlope.isChecked()
-        ui.Canvas.view_slope = view_aspect
-        self.Canvas.repaint()
+        ui.Canvas.view_aspect = self.actionSlope.isChecked()
+        ui.Canvas.repaint()
+
+    def clearData(self):
+        ui.Canvas.clearData()
+        ui.Canvas.repaint()
+
+    def clearAll(self):
+        ui.Canvas.clearAll()
+        ui.Canvas.repaint()
+    
+    def closeApp(self):
+        QApplication.instance().quit()
         
     def retranslateUi(self, MainForm):
         _translate = QtCore.QCoreApplication.translate
