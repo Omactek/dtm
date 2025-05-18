@@ -40,6 +40,9 @@ class Draw(QWidget):
             QColor("#fd0000")   # Red
         ]
 
+    def pointsInput(self, points):
+        self.points = points
+
     def mousePressEvent(self, e: QMouseEvent):
         x = e.position().x()
         y = e.position().y()

@@ -7,9 +7,11 @@
 
 
 from PyQt6 import QtCore, QtGui, QtWidgets
+
 from algorithms import *
 from Settings import *
 from draw import Draw
+from read_laz_file import load_laz_file
 
 class Ui_MainForm(object):
     def __init__(self):
@@ -177,6 +179,7 @@ class Ui_MainForm(object):
         self.actionClear_data.triggered.connect(self.clearData)
         self.actionClear_all.triggered.connect(self.clearAll)
         self.actionExit.triggered.connect(self.closeApp)
+        self.actionOpen.triggered.connect(self.openFileDialog)
 
         self.retranslateUi(MainForm)
         QtCore.QMetaObject.connectSlotsByName(MainForm)
@@ -262,6 +265,21 @@ class Ui_MainForm(object):
     
     def closeApp(self):
         QApplication.instance().quit()
+
+    def openFileDialog(self):
+        file_dialog = QtWidgets.QFileDialog()
+        file_path, _ = QtWidgets.QFileDialog.getOpenFileName(
+            None, "Open File", "", "LAS/LAZ files (*.las *.laz)"
+        )
+
+        width = ui.Canvas.width()
+        height = ui.Canvas.height()
+
+        polygons = load_laz_file(file_path, width, height)
+        
+        ui.Canvas.pointsInput(polygons)
+
+        ui.Canvas.repaint()
         
     def retranslateUi(self, MainForm):
         _translate = QtCore.QCoreApplication.translate
