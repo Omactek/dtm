@@ -281,6 +281,11 @@ class Ui_MainForm(object):
         
         #Repaint
         self.Canvas.repaint()    
+
+    def aspectChanged(self):
+        view_aspect = self.actionSlope.isChecked()
+        ui.Canvas.view_slope = view_aspect
+        self.Canvas.repaint()
         
     def retranslateUi(self, MainForm):
         _translate = QtCore.QCoreApplication.translate
@@ -310,6 +315,7 @@ class Ui_MainForm(object):
         self.actionClear_all.setText(_translate("MainForm", "Clear all"))
         self.actionParameters.setText(_translate("MainForm", "Parameters"))
         self.actionParameters.setToolTip(_translate("MainForm", "Setting parameters"))
+        self.actionContourLines.setText(_translate("MainForm", "Contour lines"))
 
 
 if __name__ == "__main__":
