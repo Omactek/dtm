@@ -20,6 +20,7 @@ class Ui_MainForm(object):
         self.zmax = 1500
         self.dz = 50
         self.dt_flag = False
+        self.data_flag = False
         
     
     def setupUi(self, MainForm):
@@ -189,6 +190,9 @@ class Ui_MainForm(object):
     def dtClick(self):
         #Perform Delaunay Triangulation and redraw
         points = ui.Canvas.points
+        if not points:
+            QtWidgets.QMessageBox.warning(None, "error", "No points loaded. Please load or add points first.")
+            return
 
         a = Algorithms()
         dt = a.delaunayTriangulation(points)
@@ -264,10 +268,12 @@ class Ui_MainForm(object):
         ui.Canvas.repaint()
 
     def clearData(self):
+        self.dt_flag = False
         ui.Canvas.clearData()
         ui.Canvas.repaint()
 
     def clearAll(self):
+        self.dt_flag = False
         ui.Canvas.clearAll()
         ui.Canvas.repaint()
     
@@ -286,7 +292,7 @@ class Ui_MainForm(object):
         polygons = load_laz_file(file_path, width, height)
         
         ui.Canvas.pointsInput(polygons)
-
+        self.dt_flag = False
         ui.Canvas.repaint()
         
     def retranslateUi(self, MainForm):

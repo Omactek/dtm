@@ -9,6 +9,7 @@ __pycache__/
 
 # Data
 data/
+tex_source/
 
 # C extensions
 *.so

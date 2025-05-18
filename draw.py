@@ -37,19 +37,10 @@ class Draw(QWidget):
             QColor("#00a5fe"),  # Light Blue
             QColor("#0000fd"),  # Blue
             QColor("#fc00f9"),  # Magenta
-            QColor("#fd0000")   # Red
         ]
 
     def pointsInput(self, points):
         self.points = points
-
-    def mousePressEvent(self, e: QMouseEvent):
-        x = e.position().x()
-        y = e.position().y()
-        z = random() * (self.zmax - self.zmin) + self.zmin
-        p = QPoint3DF(x, y, z)
-        self.points.append(p)
-        self.repaint()
 
     def paintEvent(self, e: QPaintEvent):
         qp = QPainter(self)
@@ -106,7 +97,7 @@ class Draw(QWidget):
         self.triangles.clear()
         self.repaint()
 
-    def getAspectColor(self, aspect_radians):
-        index = int((aspect_radians / (2 * pi)) * len(self.aspect_colors))
-        index = min(index, len(self.aspect_colors) - 1)
+    def getAspectColor(self, aspect):
+        aspect_deg = aspect * 180 / pi
+        index = int((aspect_deg + 22.5 )// 45) % 8 
         return self.aspect_colors[index]
