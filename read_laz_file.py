@@ -1,9 +1,12 @@
+from pathlib import Path
+
 import laspy
 from qpoint3df import QPoint3DF
 
-def load_laz_file(file_path, width, height):
+def load_file(file_path, width, height):
     """
-    Loads .laz LiDAR data using laspy and lazrs and rescales it for display.
+    Loads .las/.laz LiDAR data using laspy and lazrs and rescales it for display.
+    Can also load .txt data
 
     Args:
         file_path (str): Path to the .laz file
@@ -13,15 +16,33 @@ def load_laz_file(file_path, width, height):
     Returns:
         List of QPoint3DF objects (scaled)
     """
-    laz = laspy.read(file_path)
+    extension = Path(file_path).suffix
+    if extension in [".las", ".laz"]:
+        try:
+            import laspy
+        except ImportError:
+            print("Musíš mít laspy")
+            return
+        laz = laspy.read(file_path)
+        xs = laz.x
+        ys = laz.y
+        zs = laz.z
 
-    # Extract scaled coordinates
-    xs = laz.x
-    ys = laz.y
-    zs = laz.z
-
-    min_x, max_x = xs.min(), xs.max()
-    min_y, max_y = ys.min(), ys.max()
+        min_x, max_x = xs.min(), xs.max()
+        min_y, max_y = ys.min(), ys.max()
+        
+    elif extension in [".txt"]:
+        with open(file_path, "r") as f:
+            rows = f.readlines()
+            f.close()
+        xs, ys, zs = [], [], []
+        for row in rows:
+            vals = row.split()
+            xs.append(float(vals[0]))
+            ys.append(float(vals[1]))
+            zs.append(float(vals[2]))
+        min_x, max_x = min(xs), max(xs)
+        min_y, max_y = min(ys), max(ys)
 
     # Compute scale factor
     scale_x = width / (max_x - min_x)

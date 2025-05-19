@@ -11,7 +11,7 @@ from PyQt6 import QtCore, QtGui, QtWidgets
 from algorithms import *
 from Settings import *
 from draw import Draw
-from read_laz_file import load_laz_file
+from read_laz_file import load_file
 
 class Ui_MainForm(object):
     def __init__(self):
@@ -19,7 +19,7 @@ class Ui_MainForm(object):
         self.zmin = 150
         self.zmax = 1500
         self.dz = 50
-        self.dt_flag = False        
+        self.dt_flag = False # flag that saves whether dt triangulation was calculated
     
     def setupUi(self, MainForm):
         MainForm.setObjectName("MainForm")
@@ -281,13 +281,13 @@ class Ui_MainForm(object):
     def openFileDialog(self):
         file_dialog = QtWidgets.QFileDialog()
         file_path, _ = QtWidgets.QFileDialog.getOpenFileName(
-            None, "Open File", "", "LAS/LAZ files (*.las *.laz)"
+            None, "Open File", "", "LAS/LAZ/Text files (*.las *.laz *.txt)"
         )
 
         width = ui.Canvas.width()
         height = ui.Canvas.height()
 
-        polygons = load_laz_file(file_path, width, height)
+        polygons = load_file(file_path, width, height)
         
         ui.Canvas.pointsInput(polygons)
         self.dt_flag = False
