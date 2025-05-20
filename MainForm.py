@@ -283,12 +283,17 @@ class Ui_MainForm(object):
         file_path, _ = QtWidgets.QFileDialog.getOpenFileName(
             None, "Open File", "", "LAS/LAZ/Text files (*.las *.laz *.txt)"
         )
-
+        if not file_path:
+            return
         width = ui.Canvas.width()
         height = ui.Canvas.height()
 
-        polygons = load_file(file_path, width, height)
-        
+        try:
+            polygons = load_file(file_path, width, height)
+        except ImportError as e:
+            QtWidgets.QMessageBox.critical(None, "File loading error", str(e))
+            return
+
         ui.Canvas.pointsInput(polygons)
         self.dt_flag = False
         ui.Canvas.repaint()

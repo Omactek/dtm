@@ -1,6 +1,5 @@
 from pathlib import Path
 
-import laspy
 from qpoint3df import QPoint3DF
 
 def load_file(file_path, width, height):
@@ -13,6 +12,9 @@ def load_file(file_path, width, height):
         width (int): Canvas width for scaling
         height (int): Canvas height for scaling
 
+    Raises:
+        ImportError: If required modules laspy for .las; laspy and lazrs for .laz files arent installed but required
+
     Returns:
         List of QPoint3DF objects (scaled)
     """
@@ -21,8 +23,13 @@ def load_file(file_path, width, height):
         try:
             import laspy
         except ImportError:
-            print("Musíš mít laspy")
-            return
+            raise ImportError("Required library 'laspy' is not installed. Either install it or try loading a .txt file.")
+        if extension in [".laz"]:
+            try:
+                import lazrs
+            except ImportError:
+                raise ImportError("Required laspy binding 'lazrs' is not installed. Either install it or try loading a .txt file.")
+        
         laz = laspy.read(file_path)
         xs = laz.x
         ys = laz.y
