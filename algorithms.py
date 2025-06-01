@@ -159,10 +159,10 @@ class Algorithms:
         nx = uy * vz - uz * vy
         ny = ux * vz - uz * vx
 
-        aspect = atan2(ny, nx)
-        if aspect < 0:
-            aspect += 2 * pi
-
+        raw_aspect_rad = atan2(ny, nx)
+        if raw_aspect_rad < 0:
+            raw_aspect_rad += 2 * pi
+        aspect = (2 * pi + pi / 2 - raw_aspect_rad) % (2 * pi) # QTCanvas has inverted Y-axis
         return aspect
     
     def analyzeDTMAspect(self, dt, triangles):
