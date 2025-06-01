@@ -49,7 +49,7 @@ def load_file(file_path, width, height):
             ys.append(float(vals[1]))
             zs.append(float(vals[2]))
         min_x, max_x = min(xs), max(xs)
-        min_y, max_y = min(ys), max(ys)
+        min_y, max_y = min(ys), max(ys)        
 
     # Compute scale factor
     scale_x = width / (max_x - min_x)

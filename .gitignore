@@ -8,7 +8,7 @@ __pycache__/
 *$py.class
 
 # Data
-data/
+#data/
 tex_source/
 
 # C extensions

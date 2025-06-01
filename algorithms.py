@@ -131,7 +131,7 @@ class Algorithms:
         ux, uy, uz = p3.x() - p2.x(), p3.y() - p2.y(), p3.z - p2.z
         vx, vy, vz = p1.x() - p2.x(), p1.y() - p2.y(), p1.z - p2.z
         nx = uy * vz - uz * vy
-        ny = -(ux * vz - uz * vx)
+        ny = ux * vz - uz * vx
         nz = ux * vy - uy * vx
         n = sqrt(nx**2 + ny**2 + nz**2)
         return acos(nz / n)
@@ -157,8 +157,7 @@ class Algorithms:
         ux, uy, uz = p3.x() - p2.x(), p3.y() - p2.y(), p3.z - p2.z
         vx, vy, vz = p1.x() - p2.x(), p1.y() - p2.y(), p1.z - p2.z
         nx = uy * vz - uz * vy
-        ny = -(ux * vz - uz * vx)
-        nz = ux * vy - uy * vx
+        ny = ux * vz - uz * vx
 
         aspect = atan2(ny, nx)
         if aspect < 0:

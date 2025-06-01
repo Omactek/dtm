@@ -29,14 +29,14 @@ class Draw(QWidget):
         self.dz = 50
 
         self.aspect_colors = [
-            QColor("#fa0100"),  # Red
-            QColor("#ffa401"),  # Orange
-            QColor("#fdfe01"),  # Yellow
-            QColor("#00fe03"),  # Green
-            QColor("#00ffff"),  # Cyan
-            QColor("#00a5fe"),  # Light Blue
-            QColor("#0000fd"),  # Blue
-            QColor("#fc00f9"),  # Magenta
+            QColor("#fa0100"),
+            QColor("#ffa401"),
+            QColor("#fdfe01"),
+            QColor("#00fe03"),
+            QColor("#00ffff"),
+            QColor("#00a5fe"),
+            QColor("#0000fd"),
+            QColor("#fc00f9"),
         ]
 
     def pointsInput(self, points):
@@ -50,7 +50,7 @@ class Draw(QWidget):
             for t in self.triangles:
                 p1, p2, p3 = t.p1, t.p2, t.p3
                 slope = t.slope
-                color = int(255 - ((255 / pi) * slope))
+                color = int(255 - ((255 / (pi/2)) * slope))
                 qp.setBrush(QColor(color, color, color))
 
                 poly = QPolygonF([p1, p2, p3])
