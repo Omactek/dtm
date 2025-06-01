@@ -13,7 +13,7 @@ class Ui_Settings(object):
     
     def __init__(self):
         #Parameters of contour lines
-        self.zmin = 150 
+        self.zmin = 150
         self.zmax = 2000
         self.dz = 25
     
@@ -30,7 +30,7 @@ class Ui_Settings(object):
         self.label.setObjectName("label")
         self.gridLayout.addWidget(self.label, 0, 0, 1, 1)
         self.spinBox = QtWidgets.QSpinBox(parent=self.groupBox)
-        self.spinBox.setMinimum(150)
+        self.spinBox.setMinimum(0)
         self.spinBox.setMaximum(2000)
         self.spinBox.setSingleStep(10)
         self.spinBox.setObjectName("spinBox")
